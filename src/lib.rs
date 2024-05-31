@@ -1,15 +1,17 @@
 use geo::Geometry;
-use geozero::wkb::Wkb;
+use geozero::wkb::Ewkb;
 use geozero::{ToGeo, ToJson, ToWkt};
 use std::io::{BufRead, Write};
 
 #[inline]
-fn wkb(hexwkb: &str) -> Wkb {
-    Wkb(hex::decode(&hexwkb).unwrap())
+fn wkb(hexwkb: &str) -> Ewkb<Vec<u8>> {
+    let buf: Vec<u8> = hex::decode(&hexwkb).unwrap();
+    Ewkb(buf)
 }
 
 fn st_aswkt(hexwkb: &str) -> String {
-    wkb(&hexwkb).to_wkt().unwrap()
+    let r = wkb(&hexwkb).to_wkt();
+    r.unwrap()
 }
 
 fn st_asgeojson(hexwkb: &str) -> String {
